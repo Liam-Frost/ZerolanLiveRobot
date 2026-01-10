@@ -15,11 +15,14 @@ Keyborad 函数只监听所有特定的按键, 并触发控制函数 hotkey_hand
 (目前只在 Windows11 下测试过)
 """
 class SmartKeyboard(ThreadRunnable):
-    def __init__(self, mic_hotkey_str: str = 'f8'):
+    def __init__(self, hotkeys: list):
         super().__init__()
-        assert type(mic_hotkey_str) is str
-
-        self._hotkeys = {self.str_to_Key(mic_hotkey_str)}
+        self._hotkeys = set()
+        for string in hotkeys:
+            assert type(string) is str, "hotkeys must be string type"
+            if string in self._hotkeys:
+                assert False, "some hotkeys are set to be the same, please check your config.yaml setting"
+            self._hotkeys.add(self.str_to_Key(string))
         self._current_hotkey: Key | KeyCode = None
         self._toggle_debounce: bool = False   # 防抖
         self._key_listener = keyboard.Listener(
@@ -43,7 +46,7 @@ class SmartKeyboard(ThreadRunnable):
         self._key_listener.stop()
     
     def _on_key_press(self, key):
-        # logger.debug(f'Press {key}')
+        logger.debug(f'Press {key}')
         if key not in self._hotkeys:
             return
         
@@ -55,7 +58,7 @@ class SmartKeyboard(ThreadRunnable):
         emitter.emit(DeviceKeyboardPressEvent(hotkey=self.Key_to_str(key)))
 
     def _on_key_release(self, key):
-        # logger.debug(f'Release {key}')
+        logger.debug(f'Release {key}')
         if key == self._current_hotkey:
             self._toggle_debounce = False
             self._current_hotkey = None
@@ -72,9 +75,9 @@ class SmartKeyboard(ThreadRunnable):
         if not s:
             raise ValueError("hotkey string is empty")
 
-        # 允许传 "Key.f8" 这种写法
-        if s.lower().startswith("key."):
-            s = s.split(".", 1)[1].strip()
+        # 不允许传 "Key.f8" 这种写法
+        # if s.lower().startswith("key."):
+        #     s = s.split(".", 1)[1].strip()
 
         name = s.lower()
 

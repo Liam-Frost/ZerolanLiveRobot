@@ -128,7 +128,7 @@ class ZerolanLiveRobotContext:
         if _config.service.qqbot.enable:
             self.qq = QQBotBridge(_config.service.qqbot)
         self.mic = SmartMicrophone(vad_mode=_config.system.microphone_vad_mode)
-        self.keyboard = SmartKeyboard(mic_hotkey_str=_config.system.microphone_hotkey)
+        self.keyboard = SmartKeyboard(hotkeys=[_config.system.microphone_hotkey])
         if _config.service.obs.enable:
             self.obs = ObsStudioWsClient(_config.service.obs)
         self.config_page = DynamicConfigPage(_config)

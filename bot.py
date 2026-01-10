@@ -143,36 +143,40 @@ class ZerolanLiveRobot(BaseBot):
         def hotkey_handler(event: DeviceKeyboardPressEvent):
             logger.info(f'Hotkey toggle: {event.hotkey}')
             # 判断 hotkey 内容
-            if _config.system.default_enable_microphone and event.hotkey == _config.system.microphone_hotkey:
-                with self.keyboard._microphone_state_lock:
-                    # microphone
-                    if self.mic.is_set_talk_enabled_event():
-                        logger.debug(f'Hotkey toggled: MIC OFF')
+            try:
+                if event.hotkey == _config.system.microphone_hotkey:
+                    if _config.system.default_enable_microphone:
+                        # 麦克风对象锁
+                        with self.keyboard._microphone_state_lock:
+                            if self.mic.is_set_talk_enabled_event():
+                                logger.debug(f'Hotkey toggled: MIC OFF')
 
-                        # 关麦
-                        self.mic.unset_talk_enabled_event()
-                        
-                        # 强制 emit 已经收集的片段
-                        self.mic.force_commit(is_emit=True)
+                                # 关麦
+                                self.mic.unset_talk_enabled_event()
+                                
+                                # 强制 emit 已经收集的片段
+                                self.mic.force_commit(is_emit=True)
 
-                        # 播放停止提示音
-                        pass
+                                # 播放停止提示音
+                                pass
+                            else:
+                                logger.debug(f'Hotkey toggled: MIC ON')
+
+                                # 仅清空可能遗留的音频
+                                self.mic.force_commit(is_emit=False)
+
+                                # 播放开始提示音，block=True
+                                pass
+                                
+                                # 开麦
+                                self.mic.set_talk_enabled_event()
                     else:
-                        logger.debug(f'Hotkey toggled: MIC ON')
-
-                        # 仅清空可能遗留的音频
-                        self.mic.force_commit(is_emit=False)
-
-                        # 播放开始提示音，block=True
-                        pass
-                        
-                        # 开麦
-                        self.mic.set_talk_enabled_event()
-            elif False:
-                # example
-                pass
-            else:
-                raise ValueError(f'Invaild hotkey value but still pass the code until here.')
+                        logger.info(f'Microphone is disabled at config.yaml')
+                elif False:
+                    # example
+                    pass
+            except Exception as e:
+                logger.exception(e)
 
         @emitter.on(EventKeyRegistry.Device.MICROPHONE_SWITCH)
         def on_open_microphone(event: DeviceMicrophoneSwitchEvent):
