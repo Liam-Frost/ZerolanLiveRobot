@@ -1,7 +1,6 @@
 import io
 import threading
 import wave
-import time
 
 import pyaudio
 import webrtcvad
@@ -138,7 +137,9 @@ class SmartMicrophone(ThreadRunnable):
     def stop(self):
         self._stop_flag = True
         # self._pause_event.set()
-        self._talk_enabled_event.clear()
+        # self._talk_enabled_event.clear()
+        # Fix: Set it to true to avoid the deadlock!
+        self._talk_enabled_event.set()
         logger.info("Stopped smart microphone.")
 
     def name(self):
