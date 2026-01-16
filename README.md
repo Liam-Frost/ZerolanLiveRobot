@@ -1,6 +1,6 @@
 # Zerolan Live Robot
 
-![Static Badge](https://img.shields.io/badge/Python%20-%203.10~3.11%20-%20blue) ![Static Badge](https://img.shields.io/badge/License-MIT-orange) ![Static Badge](https://img.shields.io/badge/AI%20VTuber-blue) ![Static Badge](https://img.shields.io/badge/Bilibili-fb7299) ![Static Badge](https://img.shields.io/badge/Youtube-ff0000) ![Static Badge](https://img.shields.io/badge/Twitch-9044fe) ![Static Badge](https://img.shields.io/badge/ASR-purple) ![Static Badge](https://img.shields.io/badge/LLM-purple) ![Static Badge](https://img.shields.io/badge/TTS-purple) ![Static Badge](https://img.shields.io/badge/OCR-purple) ![Static Badge](https://img.shields.io/badge/ImageCaptioning-purple) ![Static Badge](https://img.shields.io/badge/VideoCaptioning-purple) ![Static Badge](https://img.shields.io/badge/MinecraftAIAgent-purple) ![Static Badge](https://img.shields.io/badge/ver-2.1.4-green)
+![Static Badge](https://img.shields.io/badge/Python%20-%203.10~3.11%20-%20blue) ![Static Badge](https://img.shields.io/badge/License-MIT-orange) ![Static Badge](https://img.shields.io/badge/AI%20VTuber-blue) ![Static Badge](https://img.shields.io/badge/Bilibili-fb7299) ![Static Badge](https://img.shields.io/badge/Youtube-ff0000) ![Static Badge](https://img.shields.io/badge/Twitch-9044fe) ![Static Badge](https://img.shields.io/badge/ASR-purple) ![Static Badge](https://img.shields.io/badge/LLM-purple) ![Static Badge](https://img.shields.io/badge/TTS-purple) ![Static Badge](https://img.shields.io/badge/OCR-purple) ![Static Badge](https://img.shields.io/badge/ImageCaptioning-purple) ![Static Badge](https://img.shields.io/badge/VideoCaptioning-purple) ![Static Badge](https://img.shields.io/badge/MinecraftAIAgent-purple) ![Static Badge](https://img.shields.io/badge/ver-2.2.0-green)
 
 你或许已经听说过著名的 [Neurosama](https://virtualyoutuber.fandom.com/wiki/Neuro-sama)，或者是来自中国的[木几萌](https://mobile.moegirl.org.cn/%E6%9C%A8%E5%87%A0%E8%90%8C)。你是否也想要拥有一个自己的 AI 虚拟形象陪你直播、聊天、打游戏？开源的 Zerolan Live Robot 正致力于实现您的梦想！而这仅仅需要一张消费级显卡！
 
@@ -27,13 +27,10 @@ Zerolan Live Robot 是一款多功能的直播机器人（AI VTuber），它可�
 - [x] 🎞️ OBS 直播流式打字机字幕显示与控制
 - [x] ⚙️ 系统配置和实时控制器的 WebUI 界面
 - [x] 🥳 Live2D 形象控制，嘴型同步、自动眨眼和自主呼吸
-- [x] 基于 Unity 的 Live2D 形象控制和 3D 模型控制的展示应用
+- [x] 🥽 基于 Unity 的 Live2D 形象控制和 3D 模型控制的展示应用
+- [x] ⌨️ 键盘热键控制机器人的麦克风开关
 
 ## 安装并运行
-
-> [!CAUTION]
->
-> Zerolan Live Robot 2.x 版本与旧版本 1.x 不兼容，因此您可能需要重新配置环境、安装依赖。
 
 Zerolan Project 由 [ZerolanLiveRobot](https://github.com/AkagawaTsurunaki/ZerolanLiveRobot)、[ZerolanCore](https://github.com/AkagawaTsurunaki/zerolan-core)、[ZerolanData](https://github.com/AkagawaTsurunaki/zerolan-data)、[ZerolanPlayground](https://github.com/AkagawaTsurunaki/ZerolanPlayground)、[KonekoMinecraftBot](https://github.com/AkagawaTsurunaki/KonekoMinecraftBot) 等项目共同组成。下表简要地介绍了各个项目的用途，您可以根据需要使用：
 
@@ -47,13 +44,16 @@ Zerolan Project 由 [ZerolanLiveRobot](https://github.com/AkagawaTsurunaki/Zerol
 
 ### 部署核心服务
 
-如果你希望将 AI 模型服务部署在自己的电脑上，请移步至[此处](https://github.com/AkagawaTsurunaki/zerolan-core)进完成 ZerolanCore 的相关部署工作。
+如果你希望将 AI 模型服务部署在自己的电脑上，请移步至[此处](https://github.com/AkagawaTsurunaki/zerolan-core)首先完成 ZerolanCore 的相关部署工作。
 
-本项目提供了一些第三方提供的 API 接口的支持，但如果其中没有你想要的，请根据文档实现自己的统一模型管线（Unified Model Pipeline, UMP）。
+ZerolanCore 是本项目的 AI 驱动核心，尤其是其中的语音识别服务、大语言模型服务和文本转语音服务。
 
-当然，您可以根据需求混合使用第三方接口和 ZerolanCore 服务，后续您可以在配置文件中设置。
+当然，如果您选择一些第三方 API 调用也是可以的，本项目提供了一些第三方提供的 API 接口的支持，但如果其中没有你想要的，请根据文档实现自己的统一模型管线（Unified Model Pipeline, UMP）。
+详细请看本项目中的 `pipeline` 模块和 [ZerolanData](https://github.com/AkagawaTsurunaki/zerolan-data) 这个仓库中定义的接口，它们都是用 HTTP 实现的接口。
 
-无论如何，你必须至少配置**大语言模型**才能驱动整个项目，它是驱动本项目的核心。
+您可以根据需求混合使用第三方接口和 ZerolanCore 服务，例如 LLM 用第三方 API，ASR 和 TTS 用自己的模型，后续您可以在配置文件中设置。
+
+无论如何，你必须至少配置**大语言模型**（LLM）、**自动语音识别模型**（ASR）、**文本转语音模型**（TTS）才能驱动整个项目。
 
 ### 安装本项目依赖
 
@@ -69,6 +69,8 @@ conda activate ZerolanLiveRobot
 pip install -r requirements.txt
 ```
 
+不知道什么是 `conda`？请参阅 [Anaconda 官方文档](https://www.anaconda.com/docs/getting-started/main)。
+
 ### 配置并启动本项目
 
 使用以下命令运行 Zerolan Live Robot 的主程序：
@@ -83,6 +85,13 @@ python main.py
 
 1. WebUI配置：运行 `python webui.py` 将会启动一个 WebUI 的配置界面，你可以在浏览器中访问它（通常是`http://127.0.0.1:7860`），然后根据配置项中的描述和提示进行填写，填写完毕后，可以单击右上角的 Save Config 按钮，这将保存配置到 `./resources/config.yaml`。
 2. 手动修改：直接找到 `./resources/config.yaml` 文件并按照文件内的注释引导填写对应的配置。
+
+建议您详细阅读配置项里的内容（包括注释），这对您理解本项目如何运行和具有哪些功能十分有帮助。
+
+**配置文件修改完毕后**，可以再一次运行 `python main.py` 以启动程序，若没有报错则程序已经成功启动。
+
+默认情况下，按下 `f8` 可以开启/关闭麦克风，也就是说，你需要在说话前按下一次 `f8`，在说话完毕后再按下一次 `f8`，此时麦克风的数据会被传输到 ASR 服务中，
+一旦 ASR 返回了语音识别结果，就会紧接着将你的输入提供给 LLM 服务，LLM 服务后接收到你的输入后，会将推理内容响应回来，再交由 TTS 服务用以语音合成，此时你应该可以听到机器人的回复。
 
 若在此期间出现任何报错或问题，都可以通过新建 Issue 获取帮助，届时还恳请您提供完整的日志和复现流程。
 
@@ -176,7 +185,7 @@ print(prediction.response)
 
 ### services.game
 
-用于与其它游戏进行连接和游玩的控制器。目前仅支持 Minecraft 平台。
+用于与其它游戏进行连接和游玩的控制器。目前仅支持原版 Minecraft 平台（且版本受限）。
 
 ### services.live2d
 
