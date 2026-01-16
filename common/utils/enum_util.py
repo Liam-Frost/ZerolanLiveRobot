@@ -46,8 +46,8 @@ def try_get_pynput_key_enum_str():
     try:
         from pynput.keyboard import Key
 
-        return ', '.join(list(Key.__members__.keys())[:40])
+        return '`' + '`, `'.join(list(Key.__members__.keys())[:40]) + '`'
     except ImportError:
         from loguru import logger
         logger.warning(f'Pynput not installed, please try "pip install pynput" to solve this problem.')
-        return '<Unknown Key: Because `pynput` is not installed>'
+        return '`Error: Please install `pynput` and try again`'
