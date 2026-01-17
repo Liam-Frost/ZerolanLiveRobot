@@ -336,12 +336,11 @@ class ZerolanLiveRobot(BaseBot):
 
         @emitter.on(EventKeyRegistry.QQBot.QQ_MESSAGE)
         def on_qq_message(event: QQMessageEvent):
-            prediction = self.emit_llm_prediction(event.message, direct_return=True)
-            if prediction is None:
-                logger.warning("No response from LLM remote service and will not send QQ message.")
-                return
-
             if "语音" in event.message:
+                prediction = self.emit_llm_prediction(event.message, direct_return=True)
+                if prediction is None:
+                    logger.warning("No response from LLM remote service and will not send QQ message.")
+                    return
                 tts_prompt = self.tts_prompt_manager.default_tts_prompt
                 query = TTSQuery(
                     text=prediction.response,
@@ -359,9 +358,16 @@ class ZerolanLiveRobot(BaseBot):
                 query_text = "你看见群友给你发了张图片，内容是：" + str(result)
                 logger.info(f"OCR + ImgCap: {result}")
                 prediction = self.emit_llm_prediction(query_text, direct_return=True)
+                if prediction is None:
+                    logger.warning("No response from LLM remote service and will not send QQ message.")
+                    return
                 self.qq.send_plain_message(group_id=event.group_id, receiver_id=event.sender_id,
                                            text=prediction.response)
             else:
+                prediction = self.emit_llm_prediction(event.message, direct_return=True)
+                if prediction is None:
+                    logger.warning("No response from LLM remote service and will not send QQ message.")
+                    return
                 self.qq.send_plain_message(group_id=event.group_id, receiver_id=event.sender_id,
                                            text=prediction.response)
 
