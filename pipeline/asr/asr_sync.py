@@ -6,6 +6,7 @@ from typeguard import typechecked
 from zerolan.data.pipeline.asr import ASRQuery, ASRPrediction, ASRStreamQuery
 
 from pipeline.asr.baidu_asr import BaiduASRPipeline
+from pipeline.asr.whisper_asr import WhisperASRPipeline
 from pipeline.asr.config import ASRPipelineConfig, ASRModelIdEnum
 from pipeline.base.base_sync import CommonModelPipeline
 
@@ -19,6 +20,18 @@ class ASRSyncPipeline(CommonModelPipeline):
                                      secret_key=config.baidu_asr_config.secret_key)
             self.predict = baidu.predict
             self.stream_predict = baidu.stream_predict
+        elif config.model_id == ASRModelIdEnum.WhisperASR and config.whisper_asr_config is not None:
+            whisper = WhisperASRPipeline(
+                api_key=config.whisper_asr_config.api_key,
+                api_url=config.whisper_asr_config.api_url,
+                model=config.whisper_asr_config.model,
+                language=config.whisper_asr_config.language,
+                prompt=config.whisper_asr_config.prompt,
+                temperature=config.whisper_asr_config.temperature,
+                response_format=config.whisper_asr_config.response_format
+            )
+            self.predict = whisper.predict
+            self.stream_predict = whisper.stream_predict
 
     @typechecked
     def predict(self, query: ASRQuery) -> ASRPrediction | None:
